@@ -1,0 +1,124 @@
+<div class="admin-page">
+  <app-navbar></app-navbar>
+  <main class="content">
+    <div class="page-header">
+      <div>
+        <h1>👑 Admin Panel</h1>
+        <p>Manage platform users and access control</p>
+      </div>
+      <button class="btn-create" (click)="showCreateForm = !showCreateForm">
+        {{ showCreateForm ? '✕ Cancel' : '+ Add User' }}
+      </button>
+    </div>
+
+    <!-- Create User Form -->
+    <div class="create-form-card" *ngIf="showCreateForm">
+      <h3>Create New User</h3>
+      <form [formGroup]="createForm" (ngSubmit)="onCreateUser()">
+        <div class="form-row">
+          <div class="field">
+            <label>Full Name</label>
+            <input type="text" formControlName="name" placeholder="John Doe"
+              [class.error]="f['name'].invalid && f['name'].touched" />
+            <span class="err-msg" *ngIf="f['name'].errors?.['required'] && f['name'].touched">Required</span>
+          </div>
+          <div class="field">
+            <label>Email (User ID)</label>
+            <input type="email" formControlName="userId" placeholder="john@company.com"
+              [class.error]="f['userId'].invalid && f['userId'].touched" />
+            <span class="err-msg" *ngIf="f['userId'].errors?.['required'] && f['userId'].touched">Required</span>
+            <span class="err-msg" *ngIf="f['userId'].errors?.['email'] && f['userId'].touched">Invalid email</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Password</label>
+            <input type="password" formControlName="password" placeholder="Min 6 chars"
+              [class.error]="f['password'].invalid && f['password'].touched" />
+            <span class="err-msg" *ngIf="f['password'].errors?.['required'] && f['password'].touched">Required</span>
+            <span class="err-msg" *ngIf="f['password'].errors?.['minlength'] && f['password'].touched">Min 6 chars</span>
+          </div>
+          <div class="field">
+            <label>Department</label>
+            <select formControlName="department">
+              <option>Engineering</option>
+              <option>Operations</option>
+              <option>Management</option>
+              <option>HR</option>
+              <option>Finance</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Role</label>
+            <select formControlName="role">
+              <option value="General User">General User</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="error-banner" *ngIf="createError">⚠️ {{ createError }}</div>
+        <div class="success-banner" *ngIf="createSuccess">✅ {{ createSuccess }}</div>
+        <div class="form-actions">
+          <button type="submit" class="btn-submit" [disabled]="createLoading">
+            <span *ngIf="!createLoading">Create User</span>
+            <span *ngIf="createLoading" class="spinner"></span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-card">
+      <div class="table-header">
+        <h2>Platform Users <span class="count-badge">{{ users.length }}</span></h2>
+      </div>
+
+      <div class="loading-state" *ngIf="loadingUsers">
+        <div class="loading-bar"></div>
+        <p>Loading users...</p>
+      </div>
+
+      <div class="table-wrap" *ngIf="!loadingUsers">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Department</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let u of users" class="user-row">
+              <td class="user-cell">
+                <div class="user-avatar">{{ u.avatar }}</div>
+                <strong>{{ u.name }}</strong>
+              </td>
+              <td class="email-td">{{ u.userId }}</td>
+              <td>
+                <span class="role-badge" [class.admin]="u.role === 'Admin'">{{ u.role }}</span>
+              </td>
+              <td>{{ u.department }}</td>
+              <td>{{ u.joinedAt }}</td>
+              <td>
+                <button
+                  class="btn-delete"
+                  [disabled]="u.role === 'Admin' || deletingId === u.id"
+                  (click)="deleteUser(u)"
+                  [title]="u.role === 'Admin' ? 'Cannot delete admin' : 'Delete user'"
+                >
+                  <span *ngIf="deletingId !== u.id">🗑️</span>
+                  <span *ngIf="deletingId === u.id" class="spinner-sm"></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

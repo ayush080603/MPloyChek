@@ -1,0 +1,85 @@
+<div class="login-page">
+  <div class="login-bg">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-icon">M</div>
+      <div class="brand-text">
+        <span class="brand-name">MPloyChek</span>
+        <span class="brand-sub">Background Verification Platform</span>
+      </div>
+    </div>
+
+    <h1 class="login-title">Welcome Back</h1>
+    <p class="login-sub">Sign in to your account to continue</p>
+
+    <div class="demo-btns">
+      <button type="button" class="demo-btn admin" (click)="fillDemo('admin')">
+        <span class="demo-icon">👑</span> Fill Admin
+      </button>
+      <button type="button" class="demo-btn user" (click)="fillDemo('user')">
+        <span class="demo-icon">👤</span> Fill User
+      </button>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="field">
+        <label>Email / User ID</label>
+        <input
+          type="email"
+          formControlName="userId"
+          placeholder="you@example.com"
+          [class.error]="f['userId'].invalid && f['userId'].touched"
+          autocomplete="username"
+        />
+        <span class="err-msg" *ngIf="f['userId'].errors?.['required'] && f['userId'].touched">Email is required</span>
+        <span class="err-msg" *ngIf="f['userId'].errors?.['email'] && f['userId'].touched">Enter a valid email</span>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="••••••••"
+            [class.error]="f['password'].invalid && f['password'].touched"
+            autocomplete="current-password"
+          />
+          <button type="button" class="eye-btn" (click)="showPassword = !showPassword">
+            {{ showPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        <span class="err-msg" *ngIf="f['password'].errors?.['required'] && f['password'].touched">Password is required</span>
+        <span class="err-msg" *ngIf="f['password'].errors?.['minlength'] && f['password'].touched">Min 6 characters</span>
+      </div>
+
+      <div class="field">
+        <label>Role</label>
+        <select formControlName="role">
+          <option value="General User">General User</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+
+      <div class="field delay-field">
+        <label>API Delay (ms) <span class="badge">Async Demo</span></label>
+        <input type="range" min="0" max="3000" step="500" [(ngModel)]="apiDelay" [ngModelOptions]="{standalone: true}" />
+        <span class="delay-val">{{ apiDelay }}ms</span>
+      </div>
+
+      <div class="error-banner" *ngIf="errorMsg">
+        <span>⚠️</span> {{ errorMsg }}
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="loading">
+        <span *ngIf="!loading">Sign In →</span>
+        <span *ngIf="loading" class="spinner"></span>
+      </button>
+    </form>
+  </div>
+</div>

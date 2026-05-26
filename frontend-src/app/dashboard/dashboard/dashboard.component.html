@@ -1,0 +1,151 @@
+<div class="dashboard">
+  <app-navbar></app-navbar>
+
+  <main class="content">
+    <!-- Welcome header -->
+    <div class="page-header">
+      <div class="welcome">
+        <div class="avatar">{{ currentUser?.avatar }}</div>
+        <div>
+          <h1>Welcome, {{ currentUser?.name }} 👋</h1>
+          <p>{{ currentUser?.role }} · {{ currentUser?.department }}</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="delay-control">
+          <label>API Delay: <strong>{{ apiDelay }}ms</strong></label>
+          <input type="range" min="0" max="3000" step="500" [(ngModel)]="apiDelay" (change)="loadData()" />
+        </div>
+        <button class="btn-refresh" (click)="loadData()">
+          <span>↻</span> Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Admin Stats -->
+    <div class="stats-grid" *ngIf="isAdmin && stats">
+      <div class="stat-card total">
+        <div class="stat-icon">📋</div>
+        <div class="stat-info">
+          <span class="stat-val">{{ stats.totalRecords }}</span>
+          <span class="stat-label">Total Records</span>
+        </div>
+      </div>
+      <div class="stat-card verified">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+          <span class="stat-val">{{ stats.verified }}</span>
+          <span class="stat-label">Verified</span>
+        </div>
+      </div>
+      <div class="stat-card pending">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-info">
+          <span class="stat-val">{{ stats.pending }}</span>
+          <span class="stat-label">Pending</span>
+        </div>
+      </div>
+      <div class="stat-card failed">
+        <div class="stat-icon">❌</div>
+        <div class="stat-info">
+          <span class="stat-val">{{ stats.failed }}</span>
+          <span class="stat-label">Failed</span>
+        </div>
+      </div>
+      <div class="stat-card users">
+        <div class="stat-icon">👥</div>
+        <div class="stat-info">
+          <span class="stat-val">{{ stats.totalUsers }}</span>
+          <span class="stat-label">Users</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Records Table -->
+    <div class="table-card">
+      <div class="table-header">
+        <h2>Verification Records
+          <span class="count-badge">{{ filteredRecords.length }}</span>
+        </h2>
+        <div class="table-controls">
+          <input
+            type="text"
+            placeholder="Search candidate, position..."
+            [(ngModel)]="searchTerm"
+            (input)="applyFilters()"
+            class="search-input"
+          />
+          <select [(ngModel)]="filterStatus" (change)="applyFilters()" class="filter-select">
+            <option *ngFor="let s of statusOptions" [value]="s">
+              {{ s === 'all' ? 'All Statuses' : s }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div class="loading-state" *ngIf="loadingRecords">
+        <div class="loading-bar"></div>
+        <p>Fetching records<span *ngIf="apiDelay > 0"> ({{ apiDelay }}ms delay)</span>...</p>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap" *ngIf="!loadingRecords">
+        <table *ngIf="filteredRecords.length > 0; else noData">
+          <thead>
+            <tr>
+              <th (click)="toggleSort('candidateName')" class="sortable">
+                Candidate
+                <span class="sort-icon" [class.active]="sortField === 'candidateName'">
+                  {{ sortField === 'candidateName' ? (sortAsc ? '↑' : '↓') : '↕' }}
+                </span>
+              </th>
+              <th (click)="toggleSort('position')" class="sortable">
+                Position
+                <span class="sort-icon" [class.active]="sortField === 'position'">
+                  {{ sortField === 'position' ? (sortAsc ? '↑' : '↓') : '↕' }}
+                </span>
+              </th>
+              <th (click)="toggleSort('status')" class="sortable">
+                Status
+                <span class="sort-icon" [class.active]="sortField === 'status'">
+                  {{ sortField === 'status' ? (sortAsc ? '↑' : '↓') : '↕' }}
+                </span>
+              </th>
+              <th>Risk</th>
+              <th>Checks</th>
+              <th *ngIf="isAdmin">Assigned To</th>
+              <th>Verified Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of filteredRecords" class="record-row">
+              <td class="candidate-cell">
+                <div class="candidate-avatar">{{ r.candidateName[0] }}</div>
+                <strong>{{ r.candidateName }}</strong>
+              </td>
+              <td>{{ r.position }}</td>
+              <td><span class="badge" [ngClass]="statusClass(r.status)">{{ r.status }}</span></td>
+              <td><span class="risk-dot" [ngClass]="riskClass(r.riskLevel)"></span>{{ r.riskLevel }}</td>
+              <td>
+                <div class="checks-bar">
+                  <div class="checks-fill" [style.width.%]="(r.checks / 5) * 100"></div>
+                </div>
+                <span class="checks-num">{{ r.checks }}/5</span>
+              </td>
+              <td *ngIf="isAdmin" class="email-cell">{{ r.assignedTo }}</td>
+              <td>{{ r.verifiedDate ?? '—' }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <ng-template #noData>
+          <div class="no-data">
+            <span>🔍</span>
+            <p>No records found matching your criteria.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </main>
+</div>
