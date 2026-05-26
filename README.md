@@ -1,6 +1,6 @@
 # MPloyChek - Background Verification SPA
 
-A full-stack Single Page Application built with **Angular 14** and **Node.js / Express**, featuring role-based authentication, async API demonstration, and user management — built for the MPloyChek internship code challenge.
+A full-stack Single Page Application built with **Angular 14** and **Node.js / Express**, featuring role-based authentication, async API demonstration, and user management , built for the MPloyChek internship code challenge.
 
 ---
 
@@ -11,7 +11,7 @@ A full-stack Single Page Application built with **Angular 14** and **Node.js / E
 | Frontend | Angular 14, TypeScript, SCSS, RxJS, Reactive Forms |
 | Backend | Node.js, Express.js 5 |
 | Auth | JWT (jsonwebtoken), bcryptjs |
-| Storage | In-memory (Node.js runtime — no DB setup needed) |
+| Storage | In-memory (Node.js runtime , no DB setup needed) |
 | Blockchain sim | UUID-based record IDs |
 
 ---
@@ -76,13 +76,13 @@ mploychek-final/
 
 ## Quick Start (Recommended)
 
-### Step 1 — Install http-server globally (one time only)
+### Step 1 - Install http-server globally (one time only)
 
 ```bash
 npm install -g http-server
 ```
 
-### Step 2 — Start the backend
+### Step 2 - Start the backend
 
 Open a terminal and run:
 
@@ -96,7 +96,7 @@ You should see:
 MPloyChek API running on http://localhost:3000
 ```
 
-### Step 3 — Serve the frontend
+### Step 3 - Serve the frontend
 
 Open a **second terminal** and run:
 
@@ -105,13 +105,13 @@ cd mploychek-final
 http-server frontend-dist/frontend -p 4200 --cors
 ```
 
-### Step 4 — Open the app
+### Step 4 - Open the app
 
 Visit **http://localhost:4200** in your browser.
 
 ---
 
-## OR — One-Command Start (uses both terminals automatically)
+## OR - One-Command Start (uses both terminals automatically)
 
 ```bash
 cd mploychek-final
@@ -139,39 +139,39 @@ Press `Ctrl+C` to stop both servers.
 
 ### 1. Login Page (`/login`)
 
-- **Reactive Form** with `FormBuilder` and `Validators` — validates email format, required fields, and minimum password length (6 chars)
-- **Role selector** — dropdown for `General User` / `Admin` (display only; actual role comes from the API)
+- **Reactive Form** with `FormBuilder` and `Validators` , validates email format, required fields, and minimum password length (6 chars)
+- **Role selector** , dropdown for `General User` / `Admin` (display only; actual role comes from the API)
 - **Show/Hide password** toggle button
-- **Quick-fill buttons** — pre-fills Admin or User credentials for demo
-- **API Delay slider** (0ms → 3000ms in 500ms steps) — sends `?delay=<ms>` to the login API to demonstrate async processing; the submit button shows a spinner during the wait
-- **Error banner** — displays server error messages (wrong password, user not found)
+- **Quick-fill buttons** , pre-fills Admin or User credentials for demo
+- **API Delay slider** (0ms → 3000ms in 500ms steps) , sends `?delay=<ms>` to the login API to demonstrate async processing; the submit button shows a spinner during the wait
+- **Error banner** , displays server error messages (wrong password, user not found)
 - JWT token and user object stored in `localStorage` on successful login
 
-### 2. Dashboard (`/dashboard`) — All Logged-In Users
+### 2. Dashboard (`/dashboard`) - All Logged-In Users
 
-- **User profile header** — shows name, avatar initials, role, and department pulled from the JWT/profile API
-- **API Delay slider** — same concept as login; drag to add delay, click Refresh to re-fetch records and observe the shimmer loading state
-- **Admin Stats Cards** (Admin only) — live counts for Total Records, Verified, Pending, Failed, and Total Users
+- **User profile header** , shows name, avatar initials, role, and department pulled from the JWT/profile API
+- **API Delay slider** , same concept as login; drag to add delay, click Refresh to re-fetch records and observe the shimmer loading state
+- **Admin Stats Cards** (Admin only) , live counts for Total Records, Verified, Pending, Failed, and Total Users
 - **Verification Records Table:**
-  - **Search** — filters by candidate name or position in real time
-  - **Status filter** — dropdown to filter by All / Verified / Pending / In Progress / Failed
-  - **Sortable columns** — click any column header (Candidate, Position, Status) to sort ascending/descending
-  - **Status badges** — colour-coded pills (green = Verified, yellow = Pending, blue = In Progress, red = Failed)
-  - **Risk indicators** — coloured dot + label (green = Low, yellow = Medium, red = High)
-  - **Checks progress bar** — visual bar showing how many of 5 checks are complete
-  - **Access control** — Admin sees all 8 records; General Users see only their 3 assigned records
-- **Global loading bar** — an animated orange shimmer bar at the top of the page fires on every HTTP request via the `LoadingInterceptor`
+  - **Search** , filters by candidate name or position in real time
+  - **Status filter** , dropdown to filter by All / Verified / Pending / In Progress / Failed
+  - **Sortable columns** , click any column header (Candidate, Position, Status) to sort ascending/descending
+  - **Status badges** , colour-coded pills (green = Verified, yellow = Pending, blue = In Progress, red = Failed)
+  - **Risk indicators** , coloured dot + label (green = Low, yellow = Medium, red = High)
+  - **Checks progress bar** , visual bar showing how many of 5 checks are complete
+  - **Access control** , Admin sees all 8 records; General Users see only their 3 assigned records
+- **Global loading bar** , an animated orange shimmer bar at the top of the page fires on every HTTP request via the `LoadingInterceptor`
 
-### 3. Admin Panel (`/admin`) — Admin Only
+### 3. Admin Panel (`/admin`) - Admin Only
 
-- **Double-guarded route** — `AuthGuard` checks login, `AdminGuard` checks role; non-admins are redirected to `/dashboard`
-- **Users table** — lists all users with name, email, role badge, department, and join date
+- **Double-guarded route** , `AuthGuard` checks login, `AdminGuard` checks role; non-admins are redirected to `/dashboard`
+- **Users table** , lists all users with name, email, role badge, department, and join date
 - **Create User form** (toggle with "+ Add User" button):
   - Full validation: required name, valid email, password min 6 chars
   - Fields: Full Name, Email, Password, Department (Engineering / Operations / Management / HR / Finance), Role
   - Success/error banners on submission
   - User list refreshes automatically after creation
-- **Delete user** — trash icon button; disabled for Admin accounts; confirmation dialog before deletion
+- **Delete user** , trash icon button; disabled for Admin accounts; confirmation dialog before deletion
 
 ---
 
@@ -196,7 +196,7 @@ All `GET` endpoints accept an optional `?delay=<milliseconds>` query parameter t
 | `DELETE` | `/api/users/:id` | Admin | Deletes a user by ID. Cannot delete Admin accounts |
 | `GET` | `/api/stats` | Admin | Returns aggregate counts: `{ totalRecords, verified, pending, inProgress, failed, totalUsers }` |
 
-### Example — Login
+### Example - Login
 
 ```bash
 curl -X POST http://localhost:3000/api/auth/login \
@@ -204,7 +204,7 @@ curl -X POST http://localhost:3000/api/auth/login \
   -d '{"userId":"admin@mploychek.com","password":"Admin@123"}'
 ```
 
-### Example — Get Records with 1s delay
+### Example - Get Records with 1s delay
 
 ```bash
 curl http://localhost:3000/api/records?delay=1000 \
@@ -227,9 +227,9 @@ curl http://localhost:3000/api/records?delay=1000 \
 
 ### HTTP Interceptors
 
-**AuthInterceptor** — Clones every outgoing request and injects the stored JWT as a `Bearer` token header automatically, so individual service calls never handle auth headers manually.
+**AuthInterceptor** , Clones every outgoing request and injects the stored JWT as a `Bearer` token header automatically, so individual service calls never handle auth headers manually.
 
-**LoadingInterceptor** — Calls `LoadingService.show()` when a request starts and `LoadingService.hide()` in the `finalize()` operator when it completes or errors. `LoadingService` uses a request counter (not a boolean) so concurrent requests don't prematurely hide the bar.
+**LoadingInterceptor** , Calls `LoadingService.show()` when a request starts and `LoadingService.hide()` in the `finalize()` operator when it completes or errors. `LoadingService` uses a request counter (not a boolean) so concurrent requests don't prematurely hide the bar.
 
 ### State Management
 
@@ -281,4 +281,4 @@ ng build --configuration=production
 
 ---
 
-*Built by Ayush Sinha — MPloyChek Software Engineer Intern Code Challenge*
+*Built by Ayush Sinha , MPloyChek Software Engineer Intern Code Challenge*
